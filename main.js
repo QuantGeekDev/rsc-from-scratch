@@ -4,11 +4,12 @@ import escapeHtml from "escape-html";
 
 const generateHtml = async () => {
   const recipeAuthor = "Alex Andru";
-  const postContent = await readFile("./recipes/botifarra.txt", "utf8");
+  const recipeContent = await readFile("./recipes/botifarra.txt", "utf8");
   return `<html>
       <head>
         <title>Server-Side Recipes</title>
         <meta charset="UTF-8">
+        <meta desc="Testing Server Side rendering with a recipe page">
       </head>
       <body>
         <nav>
@@ -16,7 +17,7 @@ const generateHtml = async () => {
           <hr />
         </nav>
         <article>
-          ${escapeHtml(postContent)}
+          ${escapeHtml(recipeContent)}
         </article>
         <footer>
           <hr>
@@ -28,14 +29,16 @@ const generateHtml = async () => {
     </html>`;
 };
 
+const port = 8080;
 createServer(async (_req, res) => {
   const html = await generateHtml();
   sendHTML(res, html);
 }).listen(8080);
 
-console.log("Listening on http://localhost:8080");
+console.log(`Listening on http://localhost:${port}`);
 
-function sendHTML(res, html) {
+const sendHTML = (res, html) => {
   res.setHeader("Content-Type", "text/html");
+  res.writeHead(200);
   res.end(html);
-}
+};

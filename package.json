@@ -1,8 +1,8 @@
 {
-  "name": "rsc-from-scratch",
+  "name": "react-server-components-from-scratch",
   "version": "1.0.0",
   "description": "Just a small project to better understand how RSC works",
-  "main": "src/main.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
