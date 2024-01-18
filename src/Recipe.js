@@ -21,7 +21,7 @@ class Recipe {
   };
 
   generateHtml = async () => `<article class="recipe">
-        <h1 class="recipe"> ${this.name} recipe</h1>
+        <h1 class="recipe__title"> ${this.name} recipe</h1>
         <p>
           ${escapeHtml(await this.content)}
         </p>

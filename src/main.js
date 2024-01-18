@@ -6,7 +6,7 @@ import generateRecipeLayout from "./layout.js";
 
 const port = process.env.PORT ?? 8080;
 
-createServer(async (req, res) => {
+const server = async (req, res) => {
   if (isFaviconRequest(req)) {
     const favicon = await readFile("./favicon.ico");
     sendFavicon(res, favicon);
@@ -18,7 +18,9 @@ createServer(async (req, res) => {
     return;
   }
   await router(req, res);
-}).listen(port);
+};
+
+createServer(server).listen(port);
 
 console.log(`Listening on http://localhost:${port}`);
 
