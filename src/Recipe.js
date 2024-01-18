@@ -9,7 +9,7 @@ class Recipe {
   constructor(pathToFile) {
     this.pathToFile = pathToFile;
     this.name = this.extractRecipeName(pathToFile);
-    this.content = this.getRecipeContent(pathToFile);
+    this.content = (async () => await this.getRecipeContent(pathToFile))();
   }
 
   extractRecipeName = () => this.pathToFile.split("/")[2].split(".")[0];
@@ -25,20 +25,28 @@ class Recipe {
         <title>Server-Side Recipes</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="./styles.css">
+        <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
         <meta desc="Testing Server Side rendering with a recipe page">
       </head>
       <body>
       <header>
       <span class="main-header"> Andru's Recipe Site </span>
         <nav>
+        <ul class="links">
+        <li>
           <a href="/">Recipes</a>
+        </li>
+        <li>
+        <a href="/botifarra">Botifarra</a>
+        </li>
+          </ul>  
           <hr />
         </nav>
         </header>
         <article class="recipe">
         <h1 class="recipe"> ${this.name} recipe</h1>
         <p>
-          ${escapeHtml(this.content)}
+          ${escapeHtml(await this.content)}
         </p>
           </article>
         <footer>

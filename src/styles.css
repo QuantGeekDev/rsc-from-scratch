@@ -29,3 +29,13 @@ p {
   line-height: 1.5;
   text-align: center;
 }
+
+ul,
+ol {
+  list-style: none;
+}
+
+.links {
+  display: flex;
+  gap: 20px;
+}
