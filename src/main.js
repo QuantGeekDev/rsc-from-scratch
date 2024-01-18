@@ -7,11 +7,12 @@ const croquetaRecipe = new Recipe("./recipes/croqueta.txt");
 const port = process.env.PORT ?? 8080;
 
 createServer(async (req, res) => {
-  if (req.headers.accept.includes("text/css")) {
+  if (isCssRequest(req)) {
     const css = await readFile("./src/styles.css", "utf-8");
     sendCSS(res, css);
     return;
   }
+
   const html = await croquetaRecipe.generateHtml();
   sendHTML(res, html);
 }).listen(port);
@@ -29,3 +30,6 @@ const sendCSS = (res, css) => {
   res.writeHead(200);
   res.end(css);
 };
+
+const isCssRequest = (req) =>
+  req.headers.accept.contains("text/css") ? true : false;
