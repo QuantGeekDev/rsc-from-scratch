@@ -28,14 +28,19 @@ class Recipe {
         <meta desc="Testing Server Side rendering with a recipe page">
       </head>
       <body>
+      <header>
+      <span class="main-header"> Andru's Recipe Site </span>
         <nav>
           <a href="/">Recipes</a>
           <hr />
         </nav>
-        <article>
-        <h1> ${this.name} recipe</h1>
+        </header>
+        <article class="recipe">
+        <h1 class="recipe"> ${this.name} recipe</h1>
+        <p>
           ${escapeHtml(this.content)}
-        </article>
+        </p>
+          </article>
         <footer>
           <hr>
           <p><i> ${escapeHtml(

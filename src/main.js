@@ -1,55 +1,19 @@
 import "dotenv/config";
 import { createServer } from "http";
+import Recipe from "./Recipe.js";
 import { readFile } from "fs/promises";
-import escapeHtml from "escape-html";
 
-const extractRecipeName = (pathToFile) =>
-  pathToFile.split("/")[2].split(".")[0];
-
-const processRecipe = async (pathToFile) => {
-  const recipe = {};
-  const recipeAuthor = "Alex Andru";
-  const encoding = "utf8";
-
-  recipe.name = extractRecipeName(pathToFile);
-  recipe.content = await readFile(pathToFile, encoding);
-  recipe.author = recipeAuthor;
-
-  return recipe;
-};
-
-const generateRecipeHtml = async () => {
-  const pathToFile = "./recipes/croqueta.txt";
-  const recipeHtml = await processRecipe(pathToFile);
-  return `<html>
-      <head>
-        <title>Server-Side Recipes</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="./styles.css">
-        <meta desc="Testing Server Side rendering with a recipe page">
-      </head>
-      <body>
-        <nav>
-          <a href="/">Recipes</a>
-          <hr />
-        </nav>
-        <article>
-        <h1> ${recipeHtml.name} recipe</h1>
-          ${escapeHtml(recipeHtml.content)}
-        </article>
-        <footer>
-          <hr>
-          <p><i> ${escapeHtml(
-            recipeHtml.author
-          )}</i>,  Time from Epoch <i>(in case you were wondering)</i>: ${new Date().getTime()}</p>
-        </footer>
-      </body>
-    </html>`;
-};
-
+const croquetaRecipe = new Recipe("./recipes/croqueta.txt");
 const port = process.env.PORT ?? 8080;
+
 createServer(async (req, res) => {
-  const html = await generateRecipeHtml();
+  if (isCssRequest(req)) {
+    const css = await readFile("./src/styles.css", "utf-8");
+    sendCSS(res, css);
+    return;
+  }
+
+  const html = await croquetaRecipe.generateHtml();
   sendHTML(res, html);
 }).listen(port);
 
@@ -60,3 +24,12 @@ const sendHTML = (res, html) => {
   res.writeHead(200);
   res.end(html);
 };
+
+const sendCSS = (res, css) => {
+  res.setHeader("Content-Type", "text/css");
+  res.writeHead(200);
+  res.end(css);
+};
+
+const isCssRequest = (req) =>
+  req.headers.accept.includes("text/css") ? true : false;
