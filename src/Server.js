@@ -25,7 +25,7 @@ class Server {
       return;
     }
 
-    const routerResponse = await this.router(req, res);
+    const routerResponse = await this.router.handleRequest(req);
     let html;
 
     if (routerResponse instanceof Recipe) {
