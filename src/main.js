@@ -2,14 +2,22 @@ import { createServer } from "http";
 import { readFile } from "fs/promises";
 import escapeHtml from "escape-html";
 
-const generateHtml = async () => {
+const extractRecipeName = (pathToFile) =>
+  pathToFile.split("/")[2].split(".")[0];
+
+const processRecipe = async (pathToFile) => {
+  const recipe = {};
   const recipeAuthor = "Alex Andru";
-  const pathToFile = "./recipes/botifarra.txt";
-  let recipeName = pathToFile.split("/")[2];
-  recipeName = recipeName.split(".")[0];
+  recipe.name = extractRecipeName(pathToFile);
   const encoding = "utf8";
-  debugger;
-  const recipeContent = await readFile(pathToFile, encoding);
+  recipe.content = await readFile(pathToFile, encoding);
+  recipe.author = recipeAuthor;
+  return recipe;
+};
+
+const generateHtml = async () => {
+  const pathToFile = "./recipes/botifarra.txt";
+  const recipe = await processRecipe(pathToFile);
   return `<html>
       <head>
         <title>Server-Side Recipes</title>
@@ -23,13 +31,13 @@ const generateHtml = async () => {
           <hr />
         </nav>
         <article>
-        <h1> ${recipeName} recipe</h1>
-          ${escapeHtml(recipeContent)}
+        <h1> ${recipe.name} recipe</h1>
+          ${escapeHtml(recipe.content)}
         </article>
         <footer>
           <hr>
           <p><i> ${escapeHtml(
-            recipeAuthor
+            recipe.author
           )}</i>,  Time from Epoch <i>(in case you were wondering)</i>: ${new Date().getTime()}</p>
         </footer>
       </body>
@@ -39,7 +47,6 @@ const generateHtml = async () => {
 const port = 8080;
 createServer(async (req, res) => {
   const html = await generateHtml();
-  debugger;
   sendHTML(res, html);
 }).listen(port);
 
