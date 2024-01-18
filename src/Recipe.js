@@ -4,24 +4,40 @@ import escapeHtml from "escape-html";
 class Recipe {
   name;
   content;
+  folderName;
   author = "Alex Andru";
 
-  constructor(pathToFile) {
-    this.pathToFile = pathToFile;
-    this.name = this.extractRecipeName(pathToFile);
-    this.content = (async () => await this.getRecipeTextContent(pathToFile))();
+  constructor(folderDirectoryName) {
+    this.parseFolderName(folderDirectoryName);
+    this.name = this.parseRecipeName(folderDirectoryName);
+    this.pathToFile = folderDirectoryName + "/index.txt";
+    this.content = (async () =>
+      await this.getRecipeTextContent(this.pathToFile))();
   }
 
-  extractRecipeName = () => this.pathToFile.split("/")[2].split(".")[0];
+  getFolderName = () => this.folderName;
+
+  getFolderUrl = () => "/" + this.folderName;
+
+  parseFolderName = (folderDirectoryName) =>
+    (this.folderName = folderDirectoryName.split("/")[1]);
+
+  setRecipeName = (recipeName) => (this.name = recipeName);
+
+  getRecipeName = () => this.name;
+
+  parseRecipeName = (folderName) =>
+    (this.name = folderName.split("/")[1].split("-").join(" "));
 
   getRecipeTextContent = async () => {
     const encoding = "utf8";
-    this.content = await readFile(this.pathToFile, encoding);
+    const content = await readFile(this.pathToFile, encoding);
+    this.content = content;
     return this.content;
   };
 
   generateHtml = async () => `<article class="recipe">
-        <h1 class="recipe__title"> ${this.name} recipe</h1>
+        <h1 class="recipe__title"> ${this.getRecipeName()} recipe</h1>
         <p>
           ${escapeHtml(await this.content)}
         </p>

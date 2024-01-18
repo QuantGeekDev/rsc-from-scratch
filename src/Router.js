@@ -1,19 +1,24 @@
 import { pageNotFound } from "./pageNotFound.js";
-import Recipe from "./Recipe.js";
+import { homePageHtml } from "./homepage.js";
+class Router {
+  recipes;
 
-export const router = async (req) => {
-  const { url } = req;
-  switch (url) {
-    case "/botifarra":
-      const botifarraRecipe = new Recipe("./recipes/botifarra.txt");
-      return botifarraRecipe;
-    case "/croqueta":
-    case "/":
-      const croquetaRecipe = await new Recipe("./recipes/croqueta.txt");
-      return croquetaRecipe;
-
-    default:
-      const pageNotFoundHtml = pageNotFound();
-      return pageNotFoundHtml;
+  constructor(recipesList) {
+    this.recipes = recipesList;
   }
-};
+
+  handleRequest = async (req) => {
+    const { url } = req;
+    for (const recipe of this.recipes) {
+      if (url === recipe.getFolderUrl()) {
+        return recipe;
+      }
+    }
+    if (url === "/") {
+      return homePageHtml();
+    }
+    return pageNotFound();
+  };
+}
+
+export default Router;
