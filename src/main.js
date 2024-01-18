@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createServer } from "http";
 import { readFile } from "fs/promises";
 import escapeHtml from "escape-html";
@@ -8,16 +9,18 @@ const extractRecipeName = (pathToFile) =>
 const processRecipe = async (pathToFile) => {
   const recipe = {};
   const recipeAuthor = "Alex Andru";
-  recipe.name = extractRecipeName(pathToFile);
   const encoding = "utf8";
+
+  recipe.name = extractRecipeName(pathToFile);
   recipe.content = await readFile(pathToFile, encoding);
   recipe.author = recipeAuthor;
+
   return recipe;
 };
 
-const generateHtml = async () => {
-  const pathToFile = "./recipes/botifarra.txt";
-  const recipe = await processRecipe(pathToFile);
+const generateRecipeHtml = async () => {
+  const pathToFile = "./recipes/croqueta.txt";
+  const recipeHtml = await processRecipe(pathToFile);
   return `<html>
       <head>
         <title>Server-Side Recipes</title>
@@ -31,22 +34,22 @@ const generateHtml = async () => {
           <hr />
         </nav>
         <article>
-        <h1> ${recipe.name} recipe</h1>
-          ${escapeHtml(recipe.content)}
+        <h1> ${recipeHtml.name} recipe</h1>
+          ${escapeHtml(recipeHtml.content)}
         </article>
         <footer>
           <hr>
           <p><i> ${escapeHtml(
-            recipe.author
+            recipeHtml.author
           )}</i>,  Time from Epoch <i>(in case you were wondering)</i>: ${new Date().getTime()}</p>
         </footer>
       </body>
     </html>`;
 };
 
-const port = 8080;
+const port = process.env.PORT ?? 8080;
 createServer(async (req, res) => {
-  const html = await generateHtml();
+  const html = await generateRecipeHtml();
   sendHTML(res, html);
 }).listen(port);
 
