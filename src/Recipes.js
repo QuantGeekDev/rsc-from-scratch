@@ -25,4 +25,4 @@ class Recipes {
   };
 }
 
-export default Recipes;
+export const recipes = new Recipes();
