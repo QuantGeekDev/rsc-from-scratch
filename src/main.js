@@ -6,9 +6,9 @@ import { readFile } from "fs/promises";
 const port = process.env.PORT ?? 8080;
 
 createServer(async (req, res) => {
-  console.log(req.url);
   if (isFaviconRequest(req)) {
-    console.log("Favicon has been requested");
+    const favicon = await readFile("./favicon.ico");
+    sendFavicon(res, favicon);
   }
 
   if (isCssRequest(req)) {
@@ -17,7 +17,6 @@ createServer(async (req, res) => {
     return;
   }
   await router(req, res);
-  return;
 }).listen(port);
 
 console.log(`Listening on http://localhost:${port}`);
@@ -32,6 +31,12 @@ const sendCSS = (res, css) => {
   res.setHeader("Content-Type", "text/css");
   res.writeHead(200);
   res.end(css);
+};
+
+const sendFavicon = (res, favicon) => {
+  res.setHeader("Content-Type", "image/x-icon");
+  res.writeHead(200);
+  res.end(favicon);
 };
 
 const isCssRequest = (req) => req.headers.accept.includes("text/css");
