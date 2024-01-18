@@ -2,10 +2,11 @@ import "dotenv/config";
 import { createServer } from "http";
 import Recipe from "./Recipe.js";
 import { readFile } from "fs/promises";
+import generateRecipeLayout from "./layout.js";
 
 const port = process.env.PORT ?? 8080;
 
-createServer(async (req, res) => {
+const server = async (req, res) => {
   if (isFaviconRequest(req)) {
     const favicon = await readFile("./favicon.ico");
     sendFavicon(res, favicon);
@@ -17,7 +18,9 @@ createServer(async (req, res) => {
     return;
   }
   await router(req, res);
-}).listen(port);
+};
+
+createServer(server).listen(port);
 
 console.log(`Listening on http://localhost:${port}`);
 
@@ -48,13 +51,16 @@ const router = async (req, res) => {
   switch (url) {
     case "/botifarra":
       const botifarraRecipe = new Recipe("./recipes/botifarra.txt");
-      const botifarraHtml = await botifarraRecipe.generateHtml();
+      const botifarraContent = await botifarraRecipe.generateHtml();
+      const botifarraHtml = generateRecipeLayout(botifarraContent);
       sendHTML(res, botifarraHtml);
       break;
     case "croqueta":
     case "/":
       const croquetaRecipe = await new Recipe("./recipes/croqueta.txt");
-      const croquetaHtml = await croquetaRecipe.generateHtml();
+      const croquetaContent = await croquetaRecipe.generateHtml();
+      const croquetaHtml = generateRecipeLayout(croquetaContent);
+
       await sendHTML(res, croquetaHtml);
     default:
       return;
