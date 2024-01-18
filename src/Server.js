@@ -10,15 +10,18 @@ class Server {
 
   start = async (req, res) => {
     if (this.constructor.isFaviconRequest(req)) {
-      const favicon = await readFile("./favicon.ico");
+      const pathToFavicon = "./favicon.ico";
+      const favicon = await readFile(pathToFavicon);
       this.sendFavicon(res, favicon);
     }
 
     if (this.constructor.isCssRequest(req)) {
-      const css = await readFile("./src/styles.css", "utf-8");
+      const pathToStylesheet = "./src/styles.css";
+      const css = await readFile(pathToStylesheet);
       this.sendCSS(res, css);
       return;
     }
+
     await this.router(req, res);
   };
 
