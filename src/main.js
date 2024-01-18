@@ -32,4 +32,4 @@ const sendCSS = (res, css) => {
 };
 
 const isCssRequest = (req) =>
-  req.headers.accept.contains("text/css") ? true : false;
+  req.headers.accept.includes("text/css") ? true : false;
