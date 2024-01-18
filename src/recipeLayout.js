@@ -9,16 +9,9 @@ const generateRecipeLayout = (content) => {
       </head>
       <body>
       <header>
-      <span class="main-header"> Andru's Recipe Site </span>
-        <nav>
-        <ul class="links">
-        <li>
-          <a href="/">Recipes</a>
-        </li>
-        <li>
-        <a href="/botifarra">Botifarra</a>
-        </li>
-          </ul>  
+      <span class="main-header"> The Best Recipe Site </span>
+        <nav class="links">
+          <a href="/">Back to Recipes</a>
           <hr />
         </nav>
         </header>

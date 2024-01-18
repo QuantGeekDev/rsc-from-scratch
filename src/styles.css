@@ -15,7 +15,7 @@ a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #1d1d1d;
+  color: #fff;
 }
 
 .recipe > h1 {
@@ -33,9 +33,4 @@ p {
 ul,
 ol {
   list-style: none;
-}
-
-.links {
-  display: flex;
-  gap: 20px;
 }
