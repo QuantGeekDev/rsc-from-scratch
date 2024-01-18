@@ -1,4 +1,6 @@
 import { readFile } from "fs/promises";
+import Recipe from "./Recipe.js";
+import generateRecipeLayout from "./recipeLayout.js";
 
 class Server {
   port;
@@ -13,6 +15,7 @@ class Server {
       const pathToFavicon = "./favicon.ico";
       const favicon = await readFile(pathToFavicon);
       this.sendFavicon(res, favicon);
+      return;
     }
 
     if (this.constructor.isCssRequest(req)) {
@@ -22,7 +25,17 @@ class Server {
       return;
     }
 
-    await this.router(req, res);
+    const routerResponse = await this.router(req, res);
+    let html;
+
+    if (routerResponse instanceof Recipe) {
+      const recipe = routerResponse;
+      const recipeContent = await recipe.generateHtml();
+      html = generateRecipeLayout(recipeContent);
+    } else {
+      html = routerResponse;
+    }
+    this.sendHTML(res, html);
   };
 
   sendHTML = (res, html) => {
