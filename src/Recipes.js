@@ -6,7 +6,7 @@ class Recipes {
   recipes = [];
 
   constructor() {
-    this.gatherRecipes();
+    (async () => await this.gatherRecipes())();
   }
 
   addRecipe = (recipe) => this.recipes.push(recipe);

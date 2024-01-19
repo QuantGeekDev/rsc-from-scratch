@@ -17,7 +17,7 @@ class Recipe {
 
   getFolderName = () => this.folderName;
 
-  getFolderUrl = () => "/" + this.folderName;
+  getRecipeUrl = () => "/" + this.folderName;
 
   parseFolderName = (folderDirectoryName) =>
     (this.folderName = folderDirectoryName.split("/")[1]);
@@ -31,10 +31,11 @@ class Recipe {
 
   getRecipeTextContent = async () => {
     const encoding = "utf8";
-    const content = await readFile(this.pathToFile, encoding);
-    this.content = content;
-    return this.content;
+    return (this.content = await readFile(this.pathToFile, encoding));
   };
+
+  generateLink = () =>
+    `<a href="${this.getRecipeUrl()}"><h2 class="recipes__name"> ${this.getRecipeName()}</h2> </a>`;
 
   generateHtml = async () => `<article class="recipe">
         <h1 class="recipe__title"> ${this.getRecipeName()} recipe</h1>
