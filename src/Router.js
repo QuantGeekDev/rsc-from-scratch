@@ -1,5 +1,6 @@
 import { pageNotFound } from "./pageNotFound.js";
-import { homePageHtml } from "./homepage.js";
+import { homePageLayout } from "./homepageLayout.js";
+import { generateRecipesListHtml } from "./generateRecipesListHtml.js";
 class Router {
   recipes;
 
@@ -10,12 +11,13 @@ class Router {
   handleRequest = async (req) => {
     const { url } = req;
     for (const recipe of this.recipes) {
-      if (url === recipe.getFolderUrl()) {
+      if (url === recipe.getRecipeUrl()) {
         return recipe;
       }
     }
     if (url === "/") {
-      return homePageHtml();
+      const recipesListHtml = generateRecipesListHtml(this.recipes);
+      return homePageLayout(recipesListHtml);
     }
     return pageNotFound();
   };
