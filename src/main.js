@@ -6,9 +6,8 @@ import { recipes } from "./Recipes.js";
 
 const port = process.env.PORT ?? 8080;
 
-const recipesList = recipes.getRecipes();
-
-const router = new Router(recipesList);
+const recipeList = recipes.getRecipes();
+const router = new Router(recipeList);
 const server = new Server(port, router);
 
 createServer(await server.start).listen(port);

@@ -9,9 +9,9 @@ const generateRecipeLayout = (content) => {
       </head>
       <body>
       <header>
-      <span class="main-header"> The Best Recipe Site </span>
+      <h1 class="main-header"> <a href="/"> The Best Recipe Site </a> </h1>
         <nav class="links">
-          <a href="/">Back to Recipes</a>
+          <a href="/">🔙 Back to Recipes</a>
           <hr />
         </nav>
         </header>
